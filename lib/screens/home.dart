@@ -38,33 +38,48 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             leadingWidth: 50,
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding:
-                  EdgeInsets.only(bottom: 25, left: _horizontalTitlePadding, right: _horizontalTitlePadding),
+              titlePadding: EdgeInsets.only(
+                bottom: 25,
+                right:
+                    MediaQuery.of(context).size.width / _horizontalTitlePadding,
+              ),
+              centerTitle: true,
               title: Text(
                 'October 7, 2022',
                 style: GoogleFonts.readexPro(color: const Color(0xFFFFFFFF)),
               ),
               background: Center(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
+                  padding: const EdgeInsets.only(left: 0, right: 0, top: 90),
                   child: TableCalendar(
                     currentDay: DateTime.now(),
                     focusedDay: DateTime.now(),
                     firstDay: DateTime(2020, 1, 1),
                     lastDay: DateTime(2025, 12, 31),
+                    pageJumpingEnabled: true,
                     headerVisible: false,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
                     rowHeight: 40,
-
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                      weekdayStyle:
+                          GoogleFonts.readexPro(color: const Color(0xFFFFFFFF)),
+                      weekendStyle:
+                          GoogleFonts.readexPro(color: const Color(0xFFFFFFFF)),
+                    ),
+                    calendarStyle: const CalendarStyle(
+                      defaultTextStyle: TextStyle(color: Color(0xFFFFFFFF)),
+                      outsideTextStyle: TextStyle(color: Color(0x00000000)),
+                      weekendTextStyle: TextStyle(color: Color(0xFFFFFFFF)),
+                    ),
                   ),
                 ),
               ),
             ),
             actions: const [
               Icon(Icons.search, color: Color(0xFFFFFFFF)),
-              SizedBox(width: 15),
+              SizedBox(width: 25),
               Icon(Icons.more_vert, color: Color(0xFFFFFFFF)),
-              SizedBox(width: 10),
+              SizedBox(width: 15),
             ],
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
@@ -77,7 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [for (int i = 0; i < 50; i++) const Text('kek')],
+                children: [
+                  for (int i = 0; i < 50; i++)
+                    const Text(
+                      'kek',
+                      style: TextStyle(color: Color(0x00000000)),
+                    )
+                ],
               ),
             ),
           )
@@ -87,22 +108,26 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   double get _horizontalTitlePadding {
-    const kBasePadding = 15.0;
-    const kMultiplier = 0.8;
+    const kBasePadding = 3.0;
+    const kMultiplier = 0.5;
     const kExpandedHeight = 370;
+    const kScrollCoefficient = 1.5;
 
     if (_scrollController.hasClients) {
       // In case 50%-100% of the expanded height is viewed
-      if (_scrollController.offset < (kExpandedHeight / 2)) {
+      if (_scrollController.offset < (kExpandedHeight / kScrollCoefficient)) {
         return kBasePadding;
       }
       // In case 0% of the expanded height is viewed
       if (_scrollController.offset > (kExpandedHeight - kToolbarHeight)) {
-        return (kExpandedHeight / 2 - kToolbarHeight) * kMultiplier +
+        return (kExpandedHeight / kScrollCoefficient - kToolbarHeight) *
+                kMultiplier +
             kBasePadding;
       }
       // In case 0%-50% of the expanded height is viewed
-      return (_scrollController.offset - (kExpandedHeight / 2)) * kMultiplier +
+      return (_scrollController.offset -
+                  (kExpandedHeight / kScrollCoefficient)) *
+              kMultiplier +
           kBasePadding;
     }
     return kBasePadding;
