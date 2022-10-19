@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../layout/month.dart';
 import '/layout/custom_colors.dart' as custom_colors;
 
 class HomeScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(_horizontalTitlePadding);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: CustomScrollView(
@@ -45,12 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               centerTitle: true,
               title: Text(
-                'October 7, 2022',
+                '${month[DateTime.now().month]} ${DateTime.now().day}, ${DateTime.now().year}',
                 style: GoogleFonts.readexPro(color: const Color(0xFFFFFFFF)),
               ),
               background: Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 0, top: 90),
+                  padding: const EdgeInsets.only(top: 75),
                   child: TableCalendar(
                     currentDay: DateTime.now(),
                     focusedDay: DateTime.now(),
@@ -60,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     headerVisible: false,
                     startingDayOfWeek: StartingDayOfWeek.monday,
                     rowHeight: 40,
+                    daysOfWeekHeight: 40,
                     daysOfWeekStyle: DaysOfWeekStyle(
                       weekdayStyle:
                           GoogleFonts.readexPro(color: const Color(0xFFFFFFFF)),
@@ -70,6 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       defaultTextStyle: TextStyle(color: Color(0xFFFFFFFF)),
                       outsideTextStyle: TextStyle(color: Color(0x00000000)),
                       weekendTextStyle: TextStyle(color: Color(0xFFFFFFFF)),
+                      todayDecoration : BoxDecoration(
+                        color: Color(0xFF6C33CA),
+                        shape: BoxShape.circle,
+                      ),
                     ),
                   ),
                 ),
@@ -108,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   double get _horizontalTitlePadding {
-    const kBasePadding = 3.0;
+    const kBasePadding = 3.5;
     const kMultiplier = 0.5;
     const kExpandedHeight = 370;
     const kScrollCoefficient = 1.5;
